@@ -1,0 +1,76 @@
+# React 라우팅
+  브라우저 --------------------------------> 서버
+               해당 페이지 url 요청
+          < -------------------------------
+              해당 html+css+js 페이지
+  => 기존에는 서버로부터 특정 페이지를 요청하고 받았다
+
+  SinglePageApplication (SPA)
+  - 서버로부터 하나의 앱을 받고 클라이언트(브라우저)가 url에 따라 해당 페이지만 사용자에게 보여준다
+  
+    1. 브라우저에 최초에 "/"경로로 요청하면
+    2. 서버는 React Web App을 내려준다
+    3. 내려받은 react App에서 "/"경로에 맞는 컴포넌트를 보여준다
+    4. React App에서 다른 페이지로 이동하면
+    5. 새로운 경로에 맞는 컴포넌트를 보여준다
+
+# react-router-dom
+  React routing(브라우저에서 요청한 url에 따라 보여 줄 컴포넌트를 결정)을 하는 라이브러리
+    cra 내장 라이브러리 x, facebook의 공식 패키지 x, 가장 대표작인 라우팅 패키지
+
+  - 설치
+    npm install react-router-dom
+
+  - 사용
+    <Route/>: 브라우저가 요청한 경로에 path가 들어 있으면 해당 component를 보여준다
+    <BrowserRouter>
+      <Route path="/" component={Home} /> '/profile'에도 '/about'에도 '/'가 포함되므로 Home 컴포넌트 모든 요청에서 보여둔다
+      <Route path="/profile" component={Profile} />
+      <Route path="/about" component={About} />
+    </BrowserRouter>
+
+    exact: 브라우저가 요청한 경로와 완전히 일치할때 해당 컴포넌트를 보여준디
+    <Route path="/" component={Home} exact/>
+
+
+# Dynamic routing
+  동적 데이터가 포함된 url (/profile/:1)
+  - <Route/>
+    <Route path="/profile/:id" component={Profile} />
+    - path="/profile/:id"
+      url에 포함된 동적인 데이터는 ':속성명'으로 표현한다
+  - 동적 데이터
+    이 데이터는 url의 필수적인 요소
+    이 데이터는 지정된 컴포넌트의 props로 받을 수 있다
+    props.match.params.속성명
+    넘어 온 데이터의 타입은 string이다
+
+  queryString이 포함된 url (/about?name=mark)
+  - <Route/>
+    따로 route코드를작성할 필요 없다
+  - queryString
+    이 데이터는 url의 optional 요소이다
+    이 데이터는 지정된 컴포넌트의 props로 받을 수 있다
+    props.location.search
+    넘어 온 데이터는 '?name=mark' 형식이다
+      -> key-value 형태로 바로 사용할 수 있도록 변환이 필요
+         1. URLSearchParams (브라우저 내장 객체)
+            - new URLSearchParams(props.location.search).get('name')함수를 이용하여 값을 얻어야 한다
+            - 브라우저 내장 객체이기 때문에 지원하지 않는 브라우저가 있을 수 있다
+         2. query-string (npm i query-string -S)
+            - key로 바로 꺼내 쓸 수 있다
+            - new URLSearchParams(searchParams).parse(props.location.search)
+
+
+# switch와 not found
+  switch
+  - 여러 route 중 순서대로 맞는 하나만 보여준다
+  - exact를 뺄 수 있는 로직을 만들 수 있다
+    더 넓은 범위의 url을 포함하는 <Route/>를 위에 배치한다
+    -> <Route path="/profile/:id" component={Profile} />
+       <Route path="/profile" component={Profile} />
+  - 가장 마지막에 어디 path에도 맞지 않으면 보여지는 컴포넌트를 설정해서 "Not Found"페이지를 만들 수 있다
+
+      
+
+  
